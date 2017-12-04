@@ -5,7 +5,6 @@ var bottomy = 650;
 var leftx = 580;
 var rightx = 1250;
 
-
 var Noman;
 var Flags;
 var Monster;
@@ -20,7 +19,7 @@ var flagsamount = 8;
 var camera;
 
 var thresh = 200;
-var cellsize = 8;
+var cellsize = 10;
 
 function preload() {
     myFont = loadFont('BIG JOHN.otf');
@@ -84,6 +83,9 @@ function draw() {
     var w = windowWidth;
     var h = windowHeight;
 
+    var newX = map(x, leftx, rightx, 0, w);
+    var newY = map(y, topy, bottomy, 0, h);
+
     createCanvas(w, h);
 
     if (playMode) {
@@ -104,18 +106,17 @@ function draw() {
                 }
 
                 // Noman walking on white pix
-                if ((Noman.position.x >= x) && (Noman.position.x <= x + cellsize) &&
-                    (Noman.position.y >= y) && (Noman.position.y <= y + cellsize)) {
-                    if (camera.pixels[off + 1] < thresh ||
-                        camera.pixels[off + 2] < thresh ||
-                        camera.pixels[off] < thresh
-                       ) {
-                        Noman.position.x += -1;
-                        Noman.position.y += 1;
+                if ((Noman.position.x >= newX) && (Noman.position.x <= newX + cellsize) &&
+                    (Noman.position.y >= newY) && (Noman.position.y <= newY + cellsize)) {
+                    //console.log(camera.pixels)
+                    if (camera.pixels[off + 1] < thresh) {
+                        console.log("Stopping");
+                        //                        Noman.position.x += -1;
+                        //                        Noman.position.y += 1;
                         Noman.maxSpeed = 0;
                         Noman.attractionPoint(0, Noman.position.x, Noman.position.y);
                     } else {
-                        Noman.maxSpeed = 10;
+                        Noman.maxSpeed = 3;
                     }
                 }
 
@@ -214,7 +215,7 @@ function draw() {
             Monster.position.y = frameCount % Noman.position.y + random(sin(8, 30));
         }
 
-        Noman.overlap(Monster, Fin);
+        //Noman.overlap(Monster, Fin);
 
         drawSprites();
     }
