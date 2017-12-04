@@ -1,5 +1,11 @@
 var playMode = true;
 
+var topy = 380;
+var bottomy = 650;
+var leftx = 580;
+var rightx = 1250;
+
+
 var Noman;
 var Flags;
 var Monster;
@@ -13,8 +19,8 @@ var flagsamount = 8;
 
 var camera;
 
-var thresh = 70;
-var cellsize = 30;
+var thresh = 200;
+var cellsize = 7;
 
 function preload() {
     myFont = loadFont('BIG JOHN.otf');
@@ -85,8 +91,8 @@ function draw() {
 
         // Treshold
         camera.loadPixels();
-        for (var y = 0; y < h; y += cellsize) {
-            for (var x = 0; x < w; x += cellsize) {
+        for (var y = topy; y < bottomy; y += cellsize) {
+            for (var x = leftx; x < rightx; x += cellsize) {
                 var off = ((y * w) + x) * 4;
                 camera.pixels[off],
                     camera.pixels[off + 1],
@@ -94,7 +100,7 @@ function draw() {
 
                 if (camera.pixels[off + 1] < thresh) {
                     fill(0);
-                    ellipse(x, y, 10, 10);
+                    ellipse(map(x, leftx, rightx, 0, width), map(y, topy,bottomy, 0, height), 10, 10);
                 }
 
 
@@ -206,7 +212,7 @@ function draw() {
             Monster.position.y = frameCount % Noman.position.y + random(sin(8, 30));
         }
 
-        Noman.overlap(Monster, Fin);
+        //Noman.overlap(Monster, Fin);
 
         drawSprites();
     }
