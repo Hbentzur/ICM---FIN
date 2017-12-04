@@ -20,7 +20,7 @@ var flagsamount = 8;
 var camera;
 
 var thresh = 200;
-var cellsize = 7;
+var cellsize = 8;
 
 function preload() {
     myFont = loadFont('BIG JOHN.otf');
@@ -87,7 +87,7 @@ function draw() {
     createCanvas(w, h);
 
     if (playMode) {
-        background(255, 20);
+        background(255);
 
         // Treshold
         camera.loadPixels();
@@ -100,20 +100,22 @@ function draw() {
 
                 if (camera.pixels[off + 1] < thresh) {
                     fill(0);
-                    ellipse(map(x, leftx, rightx, 0, width), map(y, topy,bottomy, 0, height), 10, 10);
+                    ellipse(map(x, leftx, rightx, 0, width), map(y, topy, bottomy, 0, height), 10, 10);
                 }
-
 
                 // Noman walking on white pix
                 if ((Noman.position.x >= x) && (Noman.position.x <= x + cellsize) &&
                     (Noman.position.y >= y) && (Noman.position.y <= y + cellsize)) {
-                    if (camera.pixels[off + 1] < thresh) {
+                    if (camera.pixels[off + 1] < thresh ||
+                        camera.pixels[off + 2] < thresh ||
+                        camera.pixels[off] < thresh
+                       ) {
                         Noman.position.x += -1;
-                        Noman.position.y += -0.5;
+                        Noman.position.y += 1;
                         Noman.maxSpeed = 0;
                         Noman.attractionPoint(0, Noman.position.x, Noman.position.y);
                     } else {
-                        Noman.maxSpeed = 3;
+                        Noman.maxSpeed = 10;
                     }
                 }
 
@@ -212,7 +214,7 @@ function draw() {
             Monster.position.y = frameCount % Noman.position.y + random(sin(8, 30));
         }
 
-        //Noman.overlap(Monster, Fin);
+        Noman.overlap(Monster, Fin);
 
         drawSprites();
     }
@@ -222,14 +224,14 @@ function draw() {
 function Fin() {
     var playMode = false;
     background(255);
-    
+
 
     textSize(80);
     textAlign(CENTER);
     fill(0);
     textFont(myFont);
-    text("oh no", width /2, height /2);
-    
+    text("oh no", width / 2, height / 2);
+
     noLoop();
 
 }
