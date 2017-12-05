@@ -1,9 +1,9 @@
 var playMode = true;
 
-var topy = 380;
+var topy = 300;
 var bottomy = 650;
-var leftx = 580;
-var rightx = 1250;
+var leftx = 610;
+var rightx = 1280;
 
 var Noman;
 var Flags;
@@ -83,9 +83,6 @@ function draw() {
     var w = windowWidth;
     var h = windowHeight;
 
-    var newX = map(x, leftx, rightx, 0, w);
-    var newY = map(y, topy, bottomy, 0, h);
-
     createCanvas(w, h);
 
     if (playMode) {
@@ -100,19 +97,21 @@ function draw() {
                     camera.pixels[off + 1],
                     camera.pixels[off + 2];
 
+
+                var newX = map(x, leftx, rightx, 0, w);
+                var newY = map(y, topy, bottomy, 0, h);
+
                 if (camera.pixels[off + 1] < thresh) {
-                    fill(0);
-                    ellipse(map(x, leftx, rightx, 0, width), map(y, topy, bottomy, 0, height), 10, 10);
+                    fill(200,200,200,50);
+                    noStroke();
+                    ellipse(newX, newY, 15, 15);
                 }
 
                 // Noman walking on white pix
                 if ((Noman.position.x >= newX) && (Noman.position.x <= newX + cellsize) &&
                     (Noman.position.y >= newY) && (Noman.position.y <= newY + cellsize)) {
-                    //console.log(camera.pixels)
                     if (camera.pixels[off + 1] < thresh) {
                         console.log("Stopping");
-                        //                        Noman.position.x += -1;
-                        //                        Noman.position.y += 1;
                         Noman.maxSpeed = 0;
                         Noman.attractionPoint(0, Noman.position.x, Noman.position.y);
                     } else {
