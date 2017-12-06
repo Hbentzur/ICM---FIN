@@ -5,6 +5,8 @@
 var playMode = true;
 var Fin;
 var points = 0;
+var Monsterframe = 1200;
+var alpha = 0;
 
 // Camera
 var camera;
@@ -66,15 +68,15 @@ function setup() {
 
     // Noman
     Noman =
-        createSprite(random(0, width / 2), 0, 60, 60);
+        createSprite(random(80, width / 2), 0, 10, 10);
     Noman.addAnimation("Graphic/Walk/Walk_1.png", "Graphic/Walk/Walk_2.png", "Graphic/Walk/Walk_3.png");
     Noman.maxSpeed = 2;
 
     // Monster
     Monster =
-        createSprite(30, 30, 60, 60);
+        createSprite(0, -50, 10, 10);
     Monster.addAnimation("Graphic/Monster/Monster_0.png", "Graphic/Monster/Monster_1.png", "Graphic/Monster/Monster_2.png");
-    Monster.maxSpeed = 4;
+    Monster.maxSpeed = 2;
     Monster.scale = 0.8;
 
 }
@@ -88,11 +90,6 @@ function draw() {
 
     if (playMode) {
         background(255);
-
-
-        // Monster
-        Monster.attractionPoint(2, Noman.position.x, Noman.position.y);
-
 
         // Treshold
         camera.loadPixels();
@@ -114,7 +111,7 @@ function draw() {
                     ellipse(newX, newY, 12, 12);
                 }
 
-                // Noman walking on white pix
+                // Noman walking & stopping
                 if ((Noman.position.x >= newX) && (Noman.position.x <= newX + cellsize) &&
                     (Noman.position.y >= newY) && (Noman.position.y <= newY + cellsize)) {
                     if (camera.pixels[off + 1] < thresh) {
@@ -122,7 +119,24 @@ function draw() {
                         Noman.maxSpeed = 0;
                         Noman.attractionPoint(0, Noman.position.x, Noman.position.y);
                     } else {
-                        Noman.maxSpeed = 2;
+                        Noman.maxSpeed = 3;
+                    }
+                }
+
+                // Monster walking & slowing down
+                if (frameCount > Monsterframe) {
+                    Monster.attractionPoint(1, Noman.position.x, Noman.position.y);
+                    if ((Monster.position.x >= newX) && (Monster.position.x <= newX + cellsize) &&
+                        (Monster.position.y >= newY) && (Monster.position.y <= newY + cellsize)) {
+                        if (camera.pixels[off + 1] < thresh) {
+                            console.log("MonsterStopping");
+                            Monster.maxSpeed = 0.5;
+                            Monster.attractionPoint(0, Monster.position.x, Monster.position.y);
+                        } else {
+                            Monster.maxSpeed = 2;
+                            Monster.velocity.x = 0.5;
+                            Monster.velocity.y = 0.5;
+                        }
                     }
                 }
 
@@ -213,12 +227,43 @@ function draw() {
         function GetPoint(Noman, Flags) {
             Noman.remove();
             points += 1;
+            //
+            //            textSize(80);
+            //            textAlign(CENTER);
+            //            fill(228, 48, 48);
+            //            textFont(myFont);
+            //            text("Yes! +1", width / 2, height - 100);
+            //            
+            //            alpha++;
+
         }
 
-        //Noman.overlap(Monster, Fin);
+        Noman.overlap(Monster, Fin);
 
         drawSprites();
     }
+
+    // Monster is coming
+    if (frameCount > (Monsterframe - 250) && frameCount < Monsterframe) {
+        textSize(80);
+        textAlign(CENTER);
+        fill(228, 48, 48);
+        textFont(myFont);
+        text("Beware of the monster", width / 2, height - 100);
+
+    }
+
+    // Game goal
+    if (frameCount > 1 && frameCount < 100) {
+        textSize(80);
+        textAlign(CENTER);
+        fill(228, 48, 48);
+        textFont(myFont);
+        text("Grab all the flags", width / 2, height - 100);
+
+    }
+
+
 
 }
 
@@ -229,10 +274,10 @@ function Fin() {
 
     textSize(80);
     textAlign(CENTER);
-    fill(0);
+    fill(228, 48, 48);
     textFont(myFont);
-    text("oh no", width / 2, height / 2);
+    text("oh no", width / 2, height - 100);
 
-    noLoop();
+    //noLoop();
 
 }
