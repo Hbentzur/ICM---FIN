@@ -23,6 +23,7 @@ var rightx = 1170;
 var Noman;
 var Flags;
 var Monster;
+var Monstereat;
 var Trees;
 var flagsamount = 8;
 
@@ -78,6 +79,37 @@ function setup() {
     Monster.addAnimation("Graphic/Monster/Monster_0.png", "Graphic/Monster/Monster_1.png", "Graphic/Monster/Monster_2.png");
     Monster.maxSpeed = 2;
     Monster.scale = 0.8;
+
+    // Monster eat
+    Monstereat =
+        createSprite(Monster.position.x, Monster.position.y, 10, 10);
+    Monster.addAnimation("Graphic/Monster_Eat/Eat0.png",
+        "Graphic/Monster_Eat/Eat1.png",
+        "Graphic/Monster_Eat/Eat0.png",
+        "Graphic/Monster_Eat/Eat1.png",
+        "Graphic/Monster_Eat/Eat0.png",
+        "Graphic/Monster_Eat/Eat1.png",
+        "Graphic/Monster_Eat/Eat2.png",
+        "Graphic/Monster_Eat/Eat3.png",
+        "Graphic/Monster_Eat/Eat4.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+        "Graphic/Monster_Eat/Eat5.png",
+        "Graphic/Monster_Eat/Eat6.png",
+    );
+    Monster.maxSpeed = 2;
+    Monster.scale = 0.8;
+
 
 }
 
@@ -271,6 +303,13 @@ function Fin() {
     var playMode = false;
     background(255);
 
+    for (var i = 0; i < Trees.length; i++) {
+        Trees[i].maxSpeed = 0;
+    }
+
+    for (var i = 0; i < Flags.length; i++) {
+        Flags[i].maxSpeed = 0;
+    }
 
     textSize(80);
     textAlign(CENTER);
@@ -278,6 +317,6 @@ function Fin() {
     textFont(myFont);
     text("oh no", width / 2, height - 100);
 
-    //noLoop();
+
 
 }
