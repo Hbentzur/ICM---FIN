@@ -107,8 +107,8 @@ function setup() {
         "Graphic/Monster_Eat/Eat5.png",
         "Graphic/Monster_Eat/Eat6.png",
     );
-    Monster.maxSpeed = 2;
-    Monster.scale = 0.8;
+    Monstereat.maxSpeed = 0;
+    Monstereat.scale = 0.8;
 
 
 }
@@ -301,8 +301,12 @@ function draw() {
 
 function Fin() {
     var playMode = false;
+
+    //    play(Monstereat);
+
     background(255);
 
+    // Stop bg
     for (var i = 0; i < Trees.length; i++) {
         Trees[i].maxSpeed = 0;
     }
@@ -316,7 +320,4 @@ function Fin() {
     fill(228, 48, 48);
     textFont(myFont);
     text("oh no", width / 2, height - 100);
-
-
-
 }
