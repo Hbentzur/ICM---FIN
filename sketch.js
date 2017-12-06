@@ -8,14 +8,14 @@ var points = 0;
 
 // Camera
 var camera;
-var thresh = 200;
+var thresh = 230;
 var cellsize = 10;
 
 // Crop
-var topy = 300;
-var bottomy = 650;
-var leftx = 610;
-var rightx = 1280;
+var topy = 235;
+var bottomy = 560;
+var leftx = 340;
+var rightx = 1170;
 
 // Animation
 var Noman;
@@ -72,10 +72,10 @@ function setup() {
 
     // Monster
     Monster =
-        createSprite(30, random(0, 500), 60, 60);
+        createSprite(30, 30, 60, 60);
     Monster.addAnimation("Graphic/Monster/Monster_0.png", "Graphic/Monster/Monster_1.png", "Graphic/Monster/Monster_2.png");
-    Monster.maxSpeed = 2;
-    Monster.scale = 0.5;
+    Monster.maxSpeed = 4;
+    Monster.scale = 0.8;
 
 }
 
@@ -89,6 +89,11 @@ function draw() {
     if (playMode) {
         background(255);
 
+
+        // Monster
+        Monster.attractionPoint(2, Noman.position.x, Noman.position.y);
+
+
         // Treshold
         camera.loadPixels();
         for (var y = topy; y < bottomy; y += cellsize) {
@@ -98,12 +103,13 @@ function draw() {
                     camera.pixels[off + 1],
                     camera.pixels[off + 2];
 
-
+                // Mapping the pix to the crop of the cam
                 var newX = map(x, leftx, rightx, 0, w);
                 var newY = map(y, topy, bottomy, 0, h);
 
+                // Gray ellipse
                 if (camera.pixels[off + 1] < thresh) {
-                    fill(180, 180, 180, 70);
+                    fill(150, 150, 150, 70);
                     noStroke();
                     ellipse(newX, newY, 12, 12);
                 }
@@ -116,27 +122,11 @@ function draw() {
                         Noman.maxSpeed = 0;
                         Noman.attractionPoint(0, Noman.position.x, Noman.position.y);
                     } else {
-                        Noman.maxSpeed = 3;
+                        Noman.maxSpeed = 2;
                     }
                 }
 
-                /*Hadar! You should fix the chacing mechanisem of the Monster. it's here.*/
-                
-                if (frameCount > 50) {
-                    if ((Monster.position.x >= newX) && (Monster.position.x <= newX + cellsize) &&
-                        (Monster.position.y >= newY) && (Monster.position.y <= newY + cellsize)) {
-                        if (camera.pixels[off + 1] <= thresh) {
-                            console.log("MonsterStopping");
-                            Monster.maxSpeed = 0;
-                            Monster.attractionPoint(0, Monster.position.x, Monster.position.y);
-                        } else if (camera.pixels[off + 1] >= thresh) {
-                            console.log("MonsterWalking");
-                            Monster.maxSpeed = 2;
-                            Monster.position.x = Noman.position.x + random(sin(8, 30));
-                            Monster.position.y = frameCount % Noman.position.y + random(sin(8, 30));
-                        }
-                    }
-                }
+
             }
         }
 
@@ -149,7 +139,7 @@ function draw() {
             Noman.attractionPoint(2, Flags[i].position.x, Flags[i].position.y);
 
             // Noman mirror
-            if (Noman.position.x < windowWidth / 2) {
+            if (Noman.position.x <= Flags[i].position.x) {
                 Noman.mirrorX(-1);
             } else {
                 Noman.mirrorX(1);
